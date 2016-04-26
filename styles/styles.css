@@ -50,4 +50,14 @@ button {
   border-radius: 0.8em;
   height: 40px;
   width: 80px;
+  border-style: none;
+  overflow: visible;
+  margin: 0;
+  outline-width: 0;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+button:active {
+  background-color: green;
 }
