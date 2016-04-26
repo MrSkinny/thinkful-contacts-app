@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Contacts</title>
+  <link rel="stylesheet" href="styles/normalize.css">
+  <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+  <div class="main">
+    <h1>Contact Book</h1>
+  
+    <section class="left-column" id="add-contact-form">
+      <header>Add a Contact:</header>
+      <form>
+        <div class="form-group">
+          <label>First name</label>
+          <input type="text" name="first-name">
+        </div>
+
+        <div class="form-group">
+          <label>Last name</label>
+          <input type="text" name="last-name">
+        </div>
+
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="text" name="phone-number">
+        </div>
+
+        <div class="form-group">
+          <label>Street</label>
+          <input type="text" name="street">
+        </div>
+
+        <div class="form-group">
+          <label>City</label>
+          <input type="text" name="city">
+        </div>
+
+        <div class="form-group">
+          <label>State</label>
+          <input type="text" name="state">
+        </div>
+        
+        <div class="form-group">
+          <button type="submit">Add</button>
+        </div>
+      </form>
+    </section>
+  
+    <section class="right-column" id="contact-detail">
+      <header>Detail:</header>
+    </section>
+  
+    <section class="full-width" id="all-contacts">
+      <header>Contacts:</header>
+    </section>
+  </div>
+  <script type="text/javascript" src="scripts/jquery-2.2.3.min.js"></script>
+  <script type="text/javascript" src="scripts/app.js"></script>
+</body>
+</html>
