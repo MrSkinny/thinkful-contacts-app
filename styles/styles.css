@@ -61,3 +61,17 @@ button {
 button:active {
   background-color: green;
 }
+
+.feedback {
+  height: 12px;
+  margin: 10px 500px 4px 0;
+}
+
+.feedback p {
+  background-color: red;
+  color: white;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  display: none;
+}
