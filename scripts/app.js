@@ -4,14 +4,7 @@ function AddressBook(){
   this.knownKeys = [ 'firstName', 'lastName', 'street', 'city', 'state', 'phoneNumber' ];
   
   this.addresses = [
-    {
-      id: 1,
-      firstName: 'rich'
-    },
-    {
-      id: 2,
-      firstName: 'laura'
-    }
+    
   ];
 }
 
@@ -28,6 +21,7 @@ AddressBook.prototype = {
   },
   
   createNextId: function(){
+    if (this.addresses.length == 0) return 1;
     return(
       Math.max.apply(null, this.addresses.map(function(address){
         return address.id;
@@ -68,6 +62,11 @@ AddressForm.prototype = {
 var addressBook = new AddressBook();
 var addressForm = new AddressForm();
 
+function prettifyFieldName(name){
+    return name
+      .replace(/([A-Z])/g, ' $1')
+      .replace(/^./, function(str){ return str.toUpperCase(); });
+}
 
 function renderContacts(addressBook){
   $('.contacts-list ul').empty();
@@ -80,7 +79,7 @@ function renderContacts(addressBook){
 function createDetailHtml(addressBook, contact){
   var html = '';
   addressBook.knownKeys.forEach(function(keyName){
-    if (contact[keyName]) html += `${contact[keyName]}<br />`;
+    if (contact[keyName]) html += `<strong>${prettifyFieldName(keyName)}:</strong> ${contact[keyName]}<br />`;
   });
   return html;
 }
