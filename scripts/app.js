@@ -81,12 +81,23 @@ var AddressForm = {
 };
 
 var View = {
+  /**
+   * METHOD: prettifyFieldName
+   * @name - string
+   * converts camelcase to separate words
+   * RETURNS - string
+   */
   prettifyFieldName(name){
     return name
       .replace(/([A-Z])/g, ' $1')
       .replace(/^./, function(str){ return str.toUpperCase(); });
   },
 
+  /**
+   * METHOD: renderContacts
+   * renders contacts from instance's model to the view
+   * RETURNS - N/A
+   */
   renderContacts: function(){
     $('.contacts-list ul').empty();
     
@@ -95,6 +106,12 @@ var View = {
     });
   },
 
+  /**
+   * METHOD: createDetailHtml
+   * @contact - object
+   * generates contact detail HTML from passed in contact object
+   * RETURNS - string - formatted HTML
+   */
   createDetailHtml: function(contact){
     var html = '';
     this.addressBook.knownKeys.forEach(function(keyName){
@@ -103,10 +120,23 @@ var View = {
     return html;
   },
 
+  /**
+   * METHOD: renderDetail
+   * @contact - object
+   * renders Contact Detail content to view
+   * RETURNS - N/A
+   */
   renderDetail: function(contact){
     $('#contact-detail-info').html(this.createDetailHtml(contact));
   },
 
+  /**
+   * METHOD: sendFeedback
+   * @msg - string
+   * @fadeTime (optional) - integer
+   * displays feedback msg to user, primarily for error msgs
+   * RETURNS - N/A
+   */
   sendFeedback: function(msg, fadeTime){
     fadeTime = fadeTime || 2000;
     $('.feedback p').text(msg).fadeIn(1000, function(){
@@ -118,6 +148,7 @@ var View = {
 
 };
 
+// Create "INSTANCES"
 var addressBook = Object.create(AddressBook);
 addressBook.knownKeys = [ 'firstName', 'lastName', 'street', 'city', 'state', 'phoneNumber' ];
 addressBook.addresses = [];
@@ -128,13 +159,18 @@ addressForm.inputFieldIds = [ 'firstName', 'lastName', 'street', 'city', 'state'
 var view = Object.create(View);
 view.addressBook = addressBook
 
+// Set up listeners
 $(function(){
   
+  /**
+   * Action: Add Contact
+   * User clicks "Add" button; adds data in form into addressBook model
+   */
   $('button#add-contact').click(function(e){
     e.preventDefault();
     var contact = addressForm.collectFormData();
     
-    // validation
+    // Validation
     if ( addressForm.validateFormData(contact) ) {
       addressBook.addContact(contact);
       addressForm.clearFormData();
@@ -145,6 +181,10 @@ $(function(){
     
   });
   
+  /**
+   * Action: Display Contact
+   * User clicks Contact name; renders contact detail
+   */
   $('.contacts-list').on('click', '.show-contact', function(e){
     e.preventDefault();
     var contact = addressBook.fetchContact(parseInt(e.target.id));
