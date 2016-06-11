@@ -2,12 +2,7 @@
 
 // DEFINE "CLASSES"
 
-function AddressBook(){
-  this.knownKeys = [ 'firstName', 'lastName', 'street', 'city', 'state', 'phoneNumber' ];
-  this.addresses = [];
-}
-
-AddressBook.prototype = {
+var AddressBook = {
 
   /**
    * METHOD: addContact
@@ -44,11 +39,8 @@ AddressBook.prototype = {
   }
 };
 
-function AddressForm(){
-  this.inputFieldIds = [ 'firstName', 'lastName', 'street', 'city', 'state', 'phoneNumber' ];
-}
 
-AddressForm.prototype = {
+var AddressForm = {
 
   /**
    * METHOD: collectFormData
@@ -88,11 +80,7 @@ AddressForm.prototype = {
   
 };
 
-function View(addressBook){
-  this.addressBook = addressBook
-}
-
-View.prototype = {
+var View = {
   prettifyFieldName(name){
     return name
       .replace(/([A-Z])/g, ' $1')
@@ -130,9 +118,15 @@ View.prototype = {
 
 };
 
-var addressBook = new AddressBook();
-var addressForm = new AddressForm();
-var view = new View(addressBook);
+var addressBook = Object.create(AddressBook);
+addressBook.knownKeys = [ 'firstName', 'lastName', 'street', 'city', 'state', 'phoneNumber' ];
+addressBook.addresses = [];
+
+var addressForm = Object.create(AddressForm);
+addressForm.inputFieldIds = [ 'firstName', 'lastName', 'street', 'city', 'state', 'phoneNumber' ];
+
+var view = Object.create(View);
+view.addressBook = addressBook
 
 $(function(){
   
