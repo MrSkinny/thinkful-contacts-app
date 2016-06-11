@@ -1,25 +1,39 @@
 'use strict';
 
+// DEFINE "CLASSES"
+
 function AddressBook(){
   this.knownKeys = [ 'firstName', 'lastName', 'street', 'city', 'state', 'phoneNumber' ];
-  
-  this.addresses = [
-    
-  ];
+  this.addresses = [];
 }
 
 AddressBook.prototype = {
+
+  /**
+   * METHOD: addContact
+   * @contact - Object
+   * Adds a contact object to the `addresses` prop on instance
+   */
   addContact: function(contact){
     contact.id = this.createNextId();
     this.addresses.push(contact);
   },
   
+  /**
+   * METHOD: fetchContact
+   * @id - integer
+   * RETURNS - Object - contact from `addresses` prop
+   */
   fetchContact: function(id){
     return this.addresses.find(function(contact){
       return contact.id === id;
     });    
   },
   
+  /**
+   * PRIVATE METHOD: createNextId
+   * Determines next available `id` for new contact object
+   */
   createNextId: function(){
     if (this.addresses.length == 0) return 1;
     return(
@@ -36,6 +50,11 @@ function AddressForm(){
 
 AddressForm.prototype = {
 
+  /**
+   * METHOD: collectFormData
+   * Iterates all user input fields
+   * RETURNS - Object - contact object 
+   */
   collectFormData: function(){
     var o = {};
     
@@ -46,12 +65,22 @@ AddressForm.prototype = {
     return o;
   },
 
+  /**
+   * METHOD: clearFormData
+   * resets all input fields in form
+   */
   clearFormData: function(){
     this.inputFieldIds.forEach(function(el){
       $('#' + el).val('');
     });  
   },
   
+  /**
+   * METHOD: validateFormData
+   * @contact - object
+   * checks object passed in for all required fields
+   * RETURNS - boolean
+   */
   validateFormData: function(contact){
     if ( !contact.firstName || !contact.lastName ) return false;
     return true;
@@ -59,43 +88,51 @@ AddressForm.prototype = {
   
 };
 
-var addressBook = new AddressBook();
-var addressForm = new AddressForm();
+function View(addressBook){
+  this.addressBook = addressBook
+}
 
-function prettifyFieldName(name){
+View.prototype = {
+  prettifyFieldName(name){
     return name
       .replace(/([A-Z])/g, ' $1')
       .replace(/^./, function(str){ return str.toUpperCase(); });
-}
+  },
 
-function renderContacts(addressBook){
-  $('.contacts-list ul').empty();
-  
-  addressBook.addresses.forEach(function(contact){
-    $('.contacts-list ul').append(`<li><a href='#' class='show-contact' id='${contact.id}-show-contact'>${contact.firstName}</a></li>`);
-  });
-}
+  renderContacts: function(){
+    $('.contacts-list ul').empty();
+    
+    this.addressBook.addresses.forEach(function(contact){
+      $('.contacts-list ul').append(`<li><a href='#' class='show-contact' id='${contact.id}-show-contact'>${contact.firstName}</a></li>`);
+    });
+  },
 
-function createDetailHtml(addressBook, contact){
-  var html = '';
-  addressBook.knownKeys.forEach(function(keyName){
-    if (contact[keyName]) html += `<strong>${prettifyFieldName(keyName)}:</strong> ${contact[keyName]}<br />`;
-  });
-  return html;
-}
+  createDetailHtml: function(contact){
+    var html = '';
+    this.addressBook.knownKeys.forEach(function(keyName){
+      if (contact[keyName]) html += `<strong>${view.prettifyFieldName(keyName)}:</strong> ${contact[keyName]}<br />`;
+    });
+    return html;
+  },
 
-function renderDetail(addressBook, contact){
-  $('#contact-detail-info').html(createDetailHtml(addressBook, contact));
-}
+  renderDetail: function(contact){
+    $('#contact-detail-info').html(this.createDetailHtml(contact));
+  },
 
-function sendFeedback(msg, fadeTime){
-  fadeTime = fadeTime || 2000;
-  $('.feedback p').text(msg).fadeIn(1000, function(){
-    setTimeout(function(){
-      $('.feedback p').fadeOut(1000);      
-    }, fadeTime);
-  });
-}
+  sendFeedback: function(msg, fadeTime){
+    fadeTime = fadeTime || 2000;
+    $('.feedback p').text(msg).fadeIn(1000, function(){
+      setTimeout(function(){
+        $('.feedback p').fadeOut(1000);      
+      }, fadeTime);
+    });
+  }
+
+};
+
+var addressBook = new AddressBook();
+var addressForm = new AddressForm();
+var view = new View(addressBook);
 
 $(function(){
   
@@ -107,9 +144,9 @@ $(function(){
     if ( addressForm.validateFormData(contact) ) {
       addressBook.addContact(contact);
       addressForm.clearFormData();
-      renderContacts(addressBook);
+      view.renderContacts();
     } else {
-      sendFeedback("You must enter a first and last name.");
+      view.sendFeedback("You must enter a first and last name.");
     }
     
   });
@@ -117,7 +154,7 @@ $(function(){
   $('.contacts-list').on('click', '.show-contact', function(e){
     e.preventDefault();
     var contact = addressBook.fetchContact(parseInt(e.target.id));
-    renderDetail(addressBook, contact);
+    view.renderDetail(contact);
   });
   
 });
