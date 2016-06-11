@@ -10,7 +10,7 @@ var AddressBook = {
    * Adds a contact object to the `addresses` prop on instance
    */
   addContact: function(contact){
-    contact.id = this.createNextId();
+    contact.id = this._createNextId();
     this.addresses.push(contact);
   },
   
@@ -26,10 +26,11 @@ var AddressBook = {
   },
   
   /**
-   * PRIVATE METHOD: createNextId
-   * Determines next available `id` for new contact object
+   * PRIVATE METHOD: _createNextId
+   * Used by addContact() to determine next available `id` for new contact object
+   * RETURNS - integer
    */
-  createNextId: function(){
+  _createNextId: function(){
     if (this.addresses.length == 0) return 1;
     return(
       Math.max.apply(null, this.addresses.map(function(address){
